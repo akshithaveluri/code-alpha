@@ -1,0 +1,127 @@
+HTML CODE:
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Simple E-Commerce Store</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <h1>Simple E-Commerce Store</h1>
+    
+    <div id="product-list"></div>
+
+    <h2>Shopping Cart</h2>
+    <ul id="cart-list"></ul>
+    <p><strong>Total: $<span id="cart-total">0.00</span></strong></p>
+    
+    <script src="script.js"></script>
+</body>
+</html>
+CSS CODE:
+body {
+    font-family: Arial, sans-serif;
+    text-align: center;
+    margin: 20px;
+}
+
+#product-list {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 20px;
+}
+
+.product {
+    border: 1px solid #ddd;
+    padding: 10px;
+    text-align: center;
+    width: 200px;
+}
+
+button {
+    background-color: green;
+    color: white;
+    border: none;
+    padding: 5px 10px;
+    cursor: pointer;
+    margin-top: 5px;
+}
+
+#cart-list {
+    list-style: none;
+    padding: 0;
+}
+
+#cart-list li {
+    background: #f4f4f4;
+    margin: 5px;
+    padding: 10px;
+    display: flex;
+    justify-content: space-between;
+}
+
+JS CODE
+
+const products = [
+    { id: 1, name: "Product A", price: 106.99, image: "https://iplanet.one/cdn/shop/files/Apple_Watch_Series_10_42mm_LTE_Silver_Aluminium_Sport_Band_Denim_PDP_Image_Position_1__en-IN_d0dad9af-afd6-4b85-808f-77a0d6cec1db.jpg?v=1727255337"},
+    { id: 2, name: "Product B", price: 150.49, image: "https://media-ik.croma.com/prod/https://media.croma.com/image/upload/v1725959828/Croma%20Assets/Communication/Mobiles/Images/309739_0_gfc7sv.png?tr=w-600"},
+    { id: 3, name: "Product C", price: 1000.99, image: "https://5.imimg.com/data5/SELLER/Default/2023/1/EY/FA/ED/44069440/apple-a1708-refurbished-laptop.jpg"}
+];
+const cart = [];
+
+// Function to display products
+function displayProducts() {
+    const productList = document.getElementById("product-list");
+
+    products.forEach(product => {
+        const productDiv = document.createElement("div");
+        productDiv.classList.add("product");
+        productDiv.innerHTML = `
+            <h3>${product.name}</h3>
+            <img src="${product.image}" alt="${product.name}" width="150" height="150" />
+            <p>Price: $${product.price.toFixed(2)}</p>
+            <button onclick="addToCart(${product.id})">Add to Cart</button>
+        `;
+        productList.appendChild(productDiv);
+    });
+}
+
+
+// Function to add products to the cart
+function addToCart(productId) {
+    const product = products.find(p => p.id === productId);
+    cart.push(product);
+    updateCart();
+}
+
+// Function to update cart display
+function updateCart() {
+    const cartList = document.getElementById("cart-list");
+    const cartTotal = document.getElementById("cart-total");
+
+    cartList.innerHTML = "";
+    let total = 0;
+
+    cart.forEach((item, index) => {
+        total += item.price;
+        const li = document.createElement("li");
+        li.innerHTML = `${item.name} - $${item.price.toFixed(2)} 
+                        <button onclick="removeFromCart(${index})">Remove</button>`;
+        cartList.appendChild(li);
+    });
+
+    cartTotal.innerText = total.toFixed(2);
+}
+
+// Function to remove item from cart
+function removeFromCart(index) {
+    cart.splice(index, 1);
+    updateCart();
+}
+
+// Initialize the store
+displayProducts();
+
+
